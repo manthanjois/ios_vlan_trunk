@@ -1,0 +1,28 @@
+enable
+configure terminal   ! Enter global configuration mode
+
+hostname s1          ! Set device hostname
+ip domain-name python.com   ! Set domain name (needed for SSH key generation)
+
+crypto key generate rsa   ! Generate RSA key for SSH
+2048                      ! Key size
+
+username admin privilege 15 password python   ! Create admin user with full privilege
+
+line vty 0 4              ! Configure VTY lines for remote login
+transport input ssh       ! Allow only SSH access
+login local               ! Use local username/password for authentication
+exit
+
+end                      ! Exit configuration mode
+wr mem                   ! Save configuration to memory
+
+configure terminal       ! Enter config mode again for VLAN setup
+
+interface vlan 1         ! Enter VLAN 1 interface
+ip address (add your_ip) 255.255.255.0   ! Set IP address on VLAN 1
+no shutdown              ! Enable interface
+exit
+
+end                      ! Exit config mode
+wr mem                   ! Save config
